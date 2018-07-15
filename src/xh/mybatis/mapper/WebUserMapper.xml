@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xh.mybatis.mapper.WebUserMapper">
+  
+    
+    <!--判断用户是否存在-->
+    <select id="exists_user" parameterType="int" resultType="int" useCache="true">
+     select count(*) as num from RYAccountsDB.dbo.AccountsInfo where GameID=#{GameID} and SpreaderID is null
+    </select> 
+    <!-- 修改用户的代理信息 -->
+    <update id="update_user" parameterType="int">
+     update RYAccountsDB.dbo.AccountsInfo set SpreaderID=8545 where GameID=#{GameID}
+    </update> 
+    <!-- 查询单个用户信息 -->
+    <select id="one_userinfo" parameterType="int" resultType="int" useCache="true">
+     select count(*) as num from RYAccountsDB.dbo.AccountsInfo where GameID=#{GameID}
+    </select>
+    <!--排行榜-->
+    <select id="top_20" parameterType="int" resultType="xh.mybatis.bean.UserBean" useCache="true">
+     select top 20 a.UserID,a.GameID,a.SpreaderID,a.Accounts,a.NickName,a.PlayTimeCount,a.OnLineTimeCount,
+     b.Score 
+     from RYAccountsDB.dbo.AccountsInfo as a
+     left join RYTreasureDB.dbo.view_userWinSore as b on a.UserID=b.UserID
+      where a.SpreaderID=8545 order by b.Score desc 
+    </select> 
+    <!-- <select id="user_info" parameterType="int" resultMap=""></select> -->
+          
+</mapper>
